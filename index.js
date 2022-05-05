@@ -38,7 +38,7 @@ async function run() {
 
     // dynamic API
     app.get('/service/:id', async(req, res)=> {
-      console.log(req.params);
+      // console.log(req.params);
       const result = await foodCollection.findOne({_id: ObjectId(req.params.id)})
       res.send(result)
     })
