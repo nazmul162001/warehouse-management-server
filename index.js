@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
 const app = express();
@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-//user
+// old user
 //foodieStore
 //9zZd4ROMklAfyzu4
 
@@ -35,6 +35,13 @@ async function run() {
       const services = await cursor.toArray();
       res.send(services);
     });
+
+    // dynamic API
+    app.get('/service/:id', async(req, res)=> {
+      console.log(req.params);
+      const result = await foodCollection.findOne({_id: ObjectId(req.params.id)})
+      res.send(result)
+    })
 
   } 
   finally {
