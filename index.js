@@ -43,6 +43,18 @@ async function run() {
       res.send(result)
     })
 
+    // add new item API // POST
+    app.post('/service', async(req,res) =>{
+      const product = req.body;
+      // console.log(product);
+      const result = await foodCollection.insertOne(product);
+      res.send({success: 'product upload success'})
+    })
+
+    // Delete item 
+
+    
+
   } 
   finally {
   }
