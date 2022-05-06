@@ -57,20 +57,10 @@ async function run() {
       const filter = {_id: ObjectId(id)};
       const result = await foodCollection.deleteOne(filter)
       res.send(result)
-
     })
 
-    // update quantity
 
-    // app.put('/service/id', async(req,res)=> {
-    //   const product = req.body;
-    //   // console.log(product);
-    //   const result = await foodCollection.findOneAndUpdate(product);
-    //   res.send({success: 'product upload success'})
-    // })
-
-
-     // update a existing item quantity
+     // update quantity
      app.put("/service/:id", async (req, res) => {
       const filter = { _id: ObjectId(req.params.id) };
       const options = { upsert: true };
