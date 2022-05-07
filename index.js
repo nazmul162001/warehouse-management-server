@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
@@ -8,6 +9,15 @@ const port = process.env.PORT || 5000;
 //middleware//
 app.use(cors());
 app.use(express.json());
+
+function verifyJWT(req, res, next){
+  const authHeader = req.headers.authorization;
+  if(!authHeader){
+    return res.status(401).send({message: 'unauthorized access'});
+  }
+  
+  next();
+}
 
 // old user
 //foodieStore
@@ -29,6 +39,16 @@ async function run() {
     await client.connect();
     const foodCollection = client.db('foodStore').collection('service');
 
+    // JWT Auth
+    app.post('/login', async(req,res)=>{
+      const user = req.body;
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '1d'
+      });
+      res.send({accessToken});
+    })
+
+    // my Service API
     app.get('/service', async (req, res) => {
       const query = {};
       const cursor = foodCollection.find(query);
@@ -77,7 +97,7 @@ async function run() {
 
 
     // My item Api
-    app.get('/myitem', async(req, res)=> {
+    app.get('/myitem', verifyJWT, async(req, res)=> {
       const email = req.query.email;
       // console.log(email);
       const query = {email: email};
