@@ -76,6 +76,15 @@ async function run() {
     });
 
 
+    // My item Api
+    app.get('/myitem', async(req, res)=> {
+      const email = req.query.email;
+      // console.log(email);
+      const query = {email: email};
+      const cursor = foodCollection.find(query);
+      const items = await cursor.toArray();
+      res.send(items)
+    })
 
 
 
